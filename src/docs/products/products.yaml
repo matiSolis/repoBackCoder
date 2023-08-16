@@ -1,0 +1,183 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Productos
+      responses:
+        "200":
+          description: Todos los productos fueron obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "401":
+          description: Error por falta de permisos
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crear producto
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/productModel'
+      responses:
+        "200":
+          description: Producto creado correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+  /api/products/{pid}:
+    get:
+      summary: Obtener un producto por el id
+      tags:
+        - Productos
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que desea obtener
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Se obtuvo el producto correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Obtener un producto por el id para actualizarlo
+      tags:
+        - Productos
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que desea obtener
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/productModel'
+      responses:
+        "200":
+          description: Se actualizo el producto correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Eliminar un producto por el id
+      tags:
+        - Productos
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que desea eliminar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Se elimino el producto correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Product:
+      type: objet
+      propierties:
+        _id:
+          type: ObjetId
+          description: id del producto autogenerado por la base de datos
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        category:
+          type: String
+          description: Categoria del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: String
+          description: Imagen del producto
+        status:
+          type: boolean
+          description: Status del producto
+        code:
+          type: String
+          description: Codigo unico del producto
+        stock:
+          type: Number
+          description: Cantidad en stock del producto
+      example:
+        _id: ObjetId('njknjkl321312mn')
+        title: Cortadora de cesped
+        description: Corta el cesped
+        category: Herramientas electricas
+        price: 50000
+        thumbnail: http://www.ejemploimagen.com/ejemplo.jpg
+        status: true
+        code: H0L4M4N0L4
+        stock: 14
+  requestBodies:
+    productModel:
+      type: objet
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        category:
+          type: String
+          description: Categoria del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: String
+          description: Imagen del producto
+        code:
+          type: String
+          description: Codigo unico del producto
+        stock:
+          type: Number
+          description: Cantidad en stock del producto
+      example:
+          title: Cortadora de cesped
+          description: Corta el cesped
+          category: Herramientas electricas
+          price: 50000
+          thumbnail: http://www.ejemploimagen.com/ejemplo.jpg
+          code: H0L4M4N0L4
+          stock: 14

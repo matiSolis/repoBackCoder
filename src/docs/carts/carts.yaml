@@ -1,0 +1,330 @@
+paths:
+  /api/carts/:
+    get:
+      summary: Obtener todos los carritos de compras
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Todos los carritos de compra fueron obtenidos correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "401":
+          description: Error por falta de permisos
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crear un carrito de compras
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito de compras creado correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "401":
+          description: Error por falta de permisos
+        "500":
+          description: Error interno del servidor
+  /api/carts/{cid}:
+    get:
+      summary: Obtener carrito de compras por el id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito de compras que desea obtener
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Se obtuvo el carrito de compras correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Agregar productos al carrito de compras
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito de compras que desea agregar productos
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/addProduct'
+      responses:
+        "200":
+          description: Se agrego exitosamente el producto al cart
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Eliminar un carrito de compras por id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito de compras que desea eliminar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Se elimino el carrito de compras correctamente
+        "500":
+          description: Error interno del servidor
+  /api/carts/{cid}/detail:
+    get:
+      summary: Obtener el detalle de los productos de un carrito de compras ingresando el id del carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito de compras del que desea obtener los detalles de los productos que hay en el
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Se obtuvo el detalle de los productos en el carrito de compras de manera exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno del servidor
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Generar un ticket de compras con la informacion recopilada del carrito de compras
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito de compras del que desea generar el ticket de compras
+      responses:
+      "200":
+        description: Se genero exitosamente el ticket de compras
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/Ticket'
+      "500":
+        description: Error interno del servidor
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Cargar dentro de un carrito de compras, obtenido por su id, un producto especifico tambien por su id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito de compras al que se desea cargar el producto
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que se quiere introducir en el carrito de compras
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Se ingreso de manera exitosa el producto en el carrito de compra
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+              #   $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Editar dentro de un carrito de compras, obtenido por su id, la cantidad de un producto especifico tambien por su id
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito de compras al que se le desea modificar la cantidad del producto
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto al que se le quiere modificar la cantidad en el carrito de compras
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProductQuantity'
+      responses:
+        "200":
+          description: Se modifico de manera exitosa la cantidad del producto en el carrito de compra
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'
+                # $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Cart:
+      type: objet
+      properties:
+        _id:
+          type: ObjetId
+          description: id del carrito de compras autogenerado por la base de datos
+        products:
+          type: objet
+          propierties:
+            product:
+              type: ObjetId
+              description: id del producto autogenerado por la base de datos
+            quantity:
+              type: Number
+              description: cantidad del producto en el carrito de compras
+      example:
+        _id: ObjetId('grea7896dfsgbdf7')
+        products:
+          - product: ObjetId('grea7896dfsgbdf7')
+            quantity: 8
+          - product: ObjetId('klkjghf3234456567m')
+            quantity: 2
+    Ticket:
+      type: objet
+      propierties:
+        _id:
+          type: ObjetId
+          description: id del ticket autogenerado por la base de datos
+        code:
+          type: String
+          description: Codigo unico del ticket
+        purchase_dateTime:
+          type: String
+          description: Fecha y hora del ticket generado
+        amount:
+          type: Number
+          description: Suma total del precio de los productos, con stock suficiente, dentro del carrito de compras
+        purchaser:
+          type: String
+          description: Email del usuario que realiza la compra
+      example:
+        _id: ObjetId('grea8976902fds')
+        code: H0L4M4N0L4
+        purchase_dateTime: 01/11/1985 - 09:00:00
+        amount: 64337
+        purchaser: pepito@email.com.ar
+    Product:
+      type: objet
+      propierties:
+        _id:
+          type: ObjetId
+          description: id del producto autogenerado por la base de datos
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        category:
+          type: String
+          description: Categoria del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: String
+          description: Imagen del producto
+        status:
+          type: boolean
+          description: Status del producto
+        code:
+          type: String
+          description: Codigo unico del producto
+        stock:
+          type: Number
+          description: Cantidad en stock del producto
+      example:
+        _id: ObjetId('njknjkl321312mn')
+        title: Cortadora de cesped
+        description: Corta el cesped
+        category: Herramientas electricas
+        price: 50000
+        thumbnail: http://www.ejemploimagen.com/ejemplo.jpg
+        status: true
+        code: H0L4M4N0L4
+        stock: 14
+  requestBodies:
+    addProduct:
+      type: objet
+      propierties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        category:
+          type: String
+          description: Categoria del producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: String
+          description: Imagen del producto
+        code:
+          type: String
+          description: Codigo unico del producto
+        stock:
+          type: Number
+          description: Cantidad en stock del producto
+      example:
+        title: Cortadora de cesped
+        description: Corta el cesped
+        category: Herramientas electricas
+        price: 50000
+        thumbnail: http://www.ejemploimagen.com/ejemplo.jpg
+        code: H0L4M4N0L4
+        stock: 14
+    updateProductQuantity:
+      type: objet
+      properties:
+        quantity:
+          type: Number
+          description: Cantidad actualizada del producto en el carrito
+      example:
+        quantity: 8
