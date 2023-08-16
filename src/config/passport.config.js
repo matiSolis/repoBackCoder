@@ -78,8 +78,10 @@ const initializePassport = () => {
             try {
                 console.log(profile);
                 const user = await userModel.findOne({ email: profile._json.email });
+                console.log(user + "    passport linea 81")
                 if (!user) {
                     const email = profile._json.email || `${profile._json.name.replace(/\s+/g, '')}@github.com`;
+                    console.log(email + "      pasport linea 84")
                     const nameParts = profile._json.name.split(' ');
                     const newUser = {
                         first_name: nameParts[0],
@@ -89,7 +91,9 @@ const initializePassport = () => {
                         password: 1234,
                         role: 'User'
                     };
+                    console.log(newUser + "       passport linea 94")
                     const result = await contactService.createContactGitHub(newUser);
+                    console.log(result + "       passport linea 96")
                     done(null, result);
                 } else {
                     done(null, user);

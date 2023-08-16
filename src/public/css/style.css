@@ -62,14 +62,7 @@ body {
     border-radius: 7px;
     }
 
-    button {
-    cursor: pointer;
-    background-color: #14a407;
-    border-radius: 5px;
-    padding: 10px;
-    border: none;
-    color: white;
-    }
+
 
 button:hover{
     background-color: #046225;
@@ -247,9 +240,15 @@ a{
 .inputButton:hover{
     background-color:#56d883;
     }
+
+
+
 .inputButton2{
+    cursor: pointer;
+    border: none;
     border-radius: 15px;
     margin-bottom: 15px;
+    padding: 10px;
 }
 .inputButton2:hover{
     background-color:#42ad68;
