@@ -1,11 +1,11 @@
-import { transporter } from "../config/gmail.js";
+import { transporter } from '../config/gmail.js';
 
 export const sendMailTicket = async (generateCode, generateDate, totalAmount, purchaserEmail) => {
-    const email = await transporter.sendMail({
-        from:"EL EMPORIO DEL JARDIN",
-        to:`${purchaserEmail}`, //aca deberia ir el `${user.email}` para que le llegue el email al user, ahora lo harcodeo asi para constatar q funciona
-        subject:"Tu compra",
-        html: `<div>
+  const email = await transporter.sendMail({
+    from: 'EL EMPORIO DEL JARDIN',
+    to: `${purchaserEmail}`, // aca deberia ir el `${user.email}` para que le llegue el email al user, ahora lo harcodeo asi para constatar q funciona
+    subject: 'Tu compra',
+    html: `<div>
         <h1>Muchas gracias por tu compra!</h1>
         <img src="https://paissano.com/wp-content/uploads/2018/07/Proyecto-de-Jardiner%C3%ADa.jpg" style="width:250px"/>
         <p>
@@ -20,6 +20,6 @@ export const sendMailTicket = async (generateCode, generateDate, totalAmount, pu
         
         Si quieres recibir nuestros descuentos semanales haz click <a href="https://www.google.com/">AQUI</a></p>
         </div>`
-    });
-    return email;
-}
+  });
+  return email;
+};

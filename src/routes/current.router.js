@@ -1,5 +1,5 @@
-import { Router } from "express";
-import ViewsController from "../controllers/views.controllers.js";
+import { Router } from 'express';
+import ViewsController from '../controllers/views.controllers.js';
 
 const router = Router();
 const viewsController = new ViewsController();

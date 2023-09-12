@@ -1,5 +1,5 @@
-export const generateUserErrorInfo = (user) =>{
-    return `
+export const generateUserErrorInfo = (user) => {
+  return `
     Alguno de los campos para crear el usuario no es valido:
     Lista de campos requeridos:
     first_name: Debe ser un campo string, pero se recibio ${user.first_name}
@@ -9,12 +9,12 @@ export const generateUserErrorInfo = (user) =>{
     `;
 };
 
-export const generateQuantityErrorInfo = (quantity) =>{
-    return `quantity: Debe ser un campo number, pero se recibio ${quantity}`;
+export const generateQuantityErrorInfo = (quantity) => {
+  return `quantity: Debe ser un campo number, pero se recibio ${quantity}`;
 };
 
-export const generateProductErrorInfo = (product) =>{
-    return `
+export const generateProductErrorInfo = (product) => {
+  return `
     Alguno de los campos para crear el producto no es valido:
     Lista de campos requeridos:
     title: Debe ser un campo string, pero se recibio ${product.title}

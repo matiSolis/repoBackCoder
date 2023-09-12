@@ -99,13 +99,6 @@ button:hover{
     border-radius: 5px;
 }
 
-/* Estilos para el título del chat */
-.titulo {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
 /* Estilos para la sección de galería */
 .galleria {
     height: 200px;

@@ -1,4 +1,4 @@
-import { transporter } from "../config/gmail.js";
+import { transporter } from '../config/gmail.js';
 
 const emailTemplate = `<div>
 <h1>Bienvenid@!!</h1>
@@ -12,11 +12,11 @@ Este email ha sido generado automaticamente, no respondas a el.
 </div>`;
 
 export const sendMailRegister = async (user) => {
-    const email = await transporter.sendMail({
-        from:"EL EMPORIO DEL JARDIN",
-        to:`${user.email}`, //aca deberia ir el `${user.email}` para que le llegue el email al user, ahora lo harcodeo asi para constatar q funciona
-        subject:"Registro exitoso",
-        html: emailTemplate
-    });
-    return email;
-}
+  const email = await transporter.sendMail({
+    from: 'EL EMPORIO DEL JARDIN',
+    to: `${user.email}`, // aca deberia ir el `${user.email}` para que le llegue el email al user, ahora lo harcodeo asi para constatar q funciona
+    subject: 'Registro exitoso',
+    html: emailTemplate
+  });
+  return email;
+};

@@ -1,13 +1,14 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 const router = Router();
 
-router.get('/admin', (req, res)=>{
-    try{
-        res.status(200).render('admin', {user: req.session.user});
-    }catch(err){
-        res.status(500).send({ error: 'Error interno del servidor' });
-    }
+router.get('/admin', (req, res) => {
+  try {
+    res.status(200).render('admin', { user: req.session.user });
+  } catch (err) {
+    res.status(500).send({ error: 'Error interno del servidor' });
+  }
 });
+// router.put('/admin/users/:uid', adminUserController.updateRoleUser)
 
 export default router;

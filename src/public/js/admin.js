@@ -1,5 +1,5 @@
-//panel de control admin
-//no esta implementado
+// panel de control admin
+// no esta implementado
 
 // function irPanelControl() {
 //     window.location.href = "/admin/panel-control";
