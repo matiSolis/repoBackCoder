@@ -8,6 +8,7 @@ export class CreateContactDto {
     this.role = user.role;
     this.last_connection = user.last_connection;
     this.products = user.products;
+    console.log('paso por acaaaa');
   };
 };
 export class GetContactDto {

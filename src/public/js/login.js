@@ -4,8 +4,7 @@ form.addEventListener('submit', e => {
   e.preventDefault();
   const data = new FormData(form);
   const obj = {};
-  // eslint-disable-next-line no-return-assign
-  data.forEach((value, key) => obj[key] = value);
+  data.forEach((value, key) => (obj[key] = value));
   fetch('/api/session/login', {
     method: 'POST',
     body: JSON.stringify(obj),

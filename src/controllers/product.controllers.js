@@ -1,5 +1,5 @@
 import ProductManagerMongo from '../Dao/managers/mongo/productManagerMongo.js';
-import { UserManagerMongo } from '../Dao/managers/mongo/userManagerMongo.js';
+import UserManagerMongo from '../Dao/managers/mongo/userManagerMongo.js';
 import { EError } from '../enums/EError.js';
 import { generateErrorParam } from '../services/error/errorParam.js';
 import { generateProductErrorInfo } from '../services/error/errorInfo.js';

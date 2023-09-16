@@ -6,20 +6,19 @@ export class ContactRepository {
   };
 
   async getContacts () {
-    const contacts = await this.dao.get();
+    const contacts = await this.dao.getAllUsers();
     return contacts;
   };
 
-  async createContact (contact) {
-    const contactDto = new CreateContactDto(contact);
-    const contactCreated = await this.dao.post(contactDto);
+  async createContact (user) {
+    const contactDto = new CreateContactDto(user);
+    const contactCreated = await this.dao.addUser(contactDto);
     return contactCreated;
   };
 
-  async createContactGitHub (contact) {
-    const contactDto = new CreateContactDto(contact);
-    const contactCreated = await this.dao.postGithub(contactDto);
-    console.log(contactCreated);
+  async createContactGitHub (user) {
+    const contactDto = new CreateContactDto(user);
+    const contactCreated = await this.dao.addUserGithub(contactDto);
     return contactCreated;
   };
 }

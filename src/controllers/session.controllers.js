@@ -7,16 +7,17 @@ export default class SessionController {
     try {
       const user = req.body;
       await sendMailRegister(user);
-      console.log(user);
-      res.send({ status: 'success', message: 'User registered' });
+      res.send({ status: 'success', payload: req.user, message: 'User registered' });
+      req.logger.info('Usuario registrado');
     } catch (error) {
       console.log('Error en el registro:', error);
-      res.send({ error: 'Error en el registro' });
+      res.status(400).send({ error: 'Error en el registro' });
     };
   };
 
   async failRegister (req, res) {
     console.log('Fallo en el registro');
+    req.logger.warn('Fallo al registrarse');
     res.send({ error: 'Error en el registro' });
   };
 
@@ -36,10 +37,9 @@ export default class SessionController {
         age: user.age,
         email: user.email,
         cart: user.cart,
-        role: user.role,
-        last_connection: user.last_connection,
-        products: user.products
+        role: user.role
       };
+      req.logger.info('Usuario logueado');
       if (user.role === 'Admin') {
         return res.redirect('/admin');
       } else {
@@ -56,6 +56,7 @@ export default class SessionController {
   async logout (req, res) {
     req.session.destroy(err => {
       if (err) return res.status(500).send({ status: 'error', error: 'No pudo cerrar sesion' });
+      req.logger.info('Usuario desconectado');
       res.redirect('/login');
     });
   };
@@ -65,8 +66,9 @@ export default class SessionController {
   };
 
   async githubCallbacks (req, res) {
+    passport.authenticate('github', { failureRedirect: '/login' });
     req.session.user = req.user;
-    console.log('llega aca y redirige a cualquier lado');
+    req.logger.info('Usuario logueado usando github');
     res.redirect('/');
   };
 }

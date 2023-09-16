@@ -1,18 +1,17 @@
-/* eslint-disable no-case-declarations */
-import { options } from '../config/options.js';
+// import { options } from '../config/options.js';
 
-const persistence = options.server.persistence;
-let contactsDao;
+// const persistence = options.server.persistence;
+// let contactsDao;
 
-switch (persistence) {
-  case 'mongo':
-    const { connectDB } = await import('../config/dbConnection.js');
-    connectDB();
-    const { UserManagerMongo } = await import('./managers/mongo/userManagerMongo.js');
-    contactsDao = new UserManagerMongo();
-    break;
-  case 'memory':
-    break;
-};
+// switch (persistence) {
+//   case 'mongo':
+//     const { connectDB } = await import('../config/dbConnection.js');
+//     connectDB();
+//     const { UserManagerMongo } = await import('../Dao/managers/mongo/userManagerMongo.js');
+//     contactsDao = new UserManagerMongo();
+//     break;
+//   case 'memory':
+//     break;
+// };
 
-export { contactsDao };
+// export { contactsDao };

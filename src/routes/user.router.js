@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import UserController from '../controllers/user.controllers.js';
+import UserManagerMongo from '../Dao/managers/mongo/userManagerMongo.js';
 
 const router = Router();
-const userController = new UserController();
+const userManagerMongo = new UserManagerMongo();
 
-router.get('/', userController.getAllUsers);
-router.get('/:uid', userController.findUserById);
-router.post('/', userController.createUser);
-router.delete('/:uid', userController.deleteUserById);
-router.delete('/', userController.deleteInactiveUser);
+router.get('/', userManagerMongo.getAllUsers);
+router.get('/:uid', userManagerMongo.findUserById);
+router.post('/', userManagerMongo.addUser);
+router.delete('/:uid', userManagerMongo.deleteUserById);
+router.delete('/', userManagerMongo.deleteInactiveUsers);
 
 export default router;

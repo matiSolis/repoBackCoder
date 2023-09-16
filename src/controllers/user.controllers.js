@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { UserManagerMongo } from '../Dao/managers/mongo/userManagerMongo.js';
+import UserManagerMongo from '../Dao/managers/mongo/userManagerMongo.js';
 import { EError } from '../enums/EError.js';
 import { generateErrorParam } from '../services/error/errorParam.js';
 import CustomError from '../services/error/errorConstructor/customError.service.js';
@@ -26,19 +26,21 @@ export default class UserController {
   // Crear un usuario nuevo
   async createUser (req, res) {
     try {
-      const { first_name, last_name, email, age, password } = req.body;
-      const findEmail = await userManagerMongo.findUserByEmail({ email });
-      if ({ email } === findEmail) {
+      const { first_name, last_name, email, age, password, role } = req.body;
+      const findUser = await userManagerMongo.findUserByEmail({ email });
+      if (findUser && findUser.email === email) {
         throw new Error('Ya hay un usuario creado con ese Email.');
       }
+      console.log('Pasamos por el create user del user.controller');
       const newUser = {
         first_name,
         last_name,
-        email,
         age,
-        password
+        email,
+        password,
+        role
       };
-      const result = await userManagerMongo.post(newUser);
+      const result = await userManagerMongo.addUser(newUser);
       res.status(200).send({
         status: 'success',
         result
@@ -46,7 +48,7 @@ export default class UserController {
     } catch (error) {
       res.status(400).send({
         status: 'Error',
-        msg: 'El usuario no se pudo crear.'
+        msg: 'Aca el usuario no se pudo crear.'
       });
     }
   };

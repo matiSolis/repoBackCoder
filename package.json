@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "npm src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "test1": "mocha test/users.test.js --timeout 10000",
     "test2": "mocha test/chaiTest.test.js --timeout 10000",
@@ -13,7 +14,7 @@
     "test4": "mocha test/supertest.test.js --timeout 10000 --exit"
   },
   "keywords": [],
-  "author": "",
+  "author": "MatiSolis",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
@@ -30,6 +31,7 @@
     "mongoose-autopopulate": "^1.0.1",
     "mongoose-paginate-v2": "^1.7.1",
     "nodemailer": "^6.9.3",
+    "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "passport-local": "^1.0.0",

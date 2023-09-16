@@ -7,67 +7,60 @@ import { sendMailUserDeleted } from '../../../helpers/sendMailUserDeleted.js';
 const cartManagerMongo = new CartManagerMongo();
 
 export class UserManagerMongo {
-  constructor () {
-    this.model = userModel;
-  };
-
   // creamos un usuario y hacemos un hash del password
-  async post ({ first_name, last_name, age, email, password, cart, role, last_connection, products } = {}) {
-    if (!first_name || !last_name || !age || !email || !password || !cart || !last_connection || !products) {
-      throw new Error('Faltan datos');
+  async addUser (first_name, last_name, age, email, password, role, username) {
+    const user = await userModel.findOne({ email: username }).exec();
+    if (user) {
+      console.log('Usuario existente en la base de datos.');
+      return false;
     };
+    const newCart = await cartManagerMongo.createNewCart();
     const newUser = {
       first_name,
       last_name,
       age,
       email,
       password: createHash(password),
-      cart,
       role,
-      last_connection,
-      products
+      cart: newCart._id
     };
-    const result = await this.model.create(newUser);
+    const result = await userModel.create(newUser);
     return result;
   };
 
   // creamos un usuario desde la cuenta de github
-  async postGithub ({ first_name, last_name, age, email, password, cart, role, last_connection, products }) {
+  async addUserGithub ({ first_name, last_name, age, email, password }) {
     const newUser = {
       first_name,
       last_name,
       age,
       email,
-      password,
-      cart,
-      role,
-      last_connection,
-      products
+      password
     };
-    const result = await this.model.create(newUser);
+    const result = await userModel.create(newUser);
     return result;
   };
 
   // buscamos un usuario por su email
   async findUserByEmail (username) {
-    const user = await this.model.findOne({ email: username });
+    const user = await userModel.findOne({ email: username });
     return user;
   };
 
   // buscamos un usuario por su id
   async findUserById (idUser) {
-    const user = await this.model.findOne({ _id: idUser });
+    const user = await userModel.findOne({ _id: idUser });
     return user;
   };
 
   async findUserByJsonEmail (profile) {
-    const user = await this.model.findOne({ email: profile._json.email });
+    const user = await userModel.findOne({ email: profile._json.email });
     return user;
   };
 
   // borramos un usuario por su id, tambien borramos el cart que se le genero
   async deleteUserById (idUser) {
-    const user = await this.model.findOne({ _id: idUser });
+    const user = await userModel.findOne({ _id: idUser });
     console.log(user);
     if (!user) {
       throw new Error('Usuario inexistente.');
@@ -84,7 +77,7 @@ export class UserManagerMongo {
 
   // traemos todos los usuarios de la base de datos
   async getAllUsers () {
-    const users = await this.model.find();
+    const users = await userModel.find();
     return users;
   };
 

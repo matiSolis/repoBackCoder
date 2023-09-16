@@ -1,14 +1,12 @@
 import winston from 'winston';
 import __dirname from '../path.js';
 import path from 'path';
-import { options } from '../config/options.js';
 import * as dotennv from 'dotenv';
 
 dotennv.config();
 
-const currentEnv = options.nodeEnv;
+const currentEnv = process.env.NODE_ENV || 'development';
 
-console.log(currentEnv);
 const customLevels = {
   levels: {
     fatal: 0,
@@ -50,7 +48,9 @@ const devLogger = winston.createLogger({
 const prodLogger = winston.createLogger({
   levels: customLevels.levels,
   transports: [
-    new winston.transports.Console({ level: 'http' }),
+    new winston.transports.Console({
+      level: 'http'
+    }),
     new winston.transports.File({
       filename: path.join(__dirname, '/logs/error.log'),
       level: 'info'

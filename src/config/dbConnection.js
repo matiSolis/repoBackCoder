@@ -1,20 +1,19 @@
 import mongoose from 'mongoose';
 import { options } from './options.js';
-// import { EError } from "../enums/EError.js";
-// import { generateDBError } from "../services/error/DbError.js";
-// import CustomError from "../services/error/errorConstructor/customError.service.js";
 
-// const customError = new CustomError();
-export const connectDB = async () => {
+let connectDB = null;
+
+(async () => {
   try {
-    mongoose.connect(options.mongoDB.url);
+    if (connectDB) {
+      console.log('Ya estás conectado a la base de datos');
+      return connectDB;
+    } else {
+      connectDB = await mongoose.connect(options.mongoDB.url);
+      console.log('Conectado con la base de datos');
+      return connectDB;
+    }
   } catch (error) {
-    console.log(`Hubo un error conectandose a la base ${error}`);
-    // customError.createError({
-    //     name: "Database Error",
-    //     cause:generateDBError(options.mongoDB.url),
-    //     message:"Error al intentar conectarse a la base de datos.",
-    //     errorCode: EError.DATABASE_ERROR
-    // });
-  };
-};
+    console.log('Error al conectarse a la base de datos: ' + error);
+  }
+})();

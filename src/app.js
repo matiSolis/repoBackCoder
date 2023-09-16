@@ -1,6 +1,4 @@
 import express from 'express';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 import handlebars from 'express-handlebars';
 import passport from 'passport';
 import swaggerUi from 'swagger-ui-express';
@@ -8,6 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import './config/dbConnection.js';
 import { swaggerSpecs } from './config/docConfig.js';
 import { options } from './config/options.js';
+import mongoDB from './config/mongoDB.js';
 import __dirname from './path.js';
 import loggerRoute from './routes/loger.router.js';
 import cartRouter from './routes/cart.router.js';
@@ -29,15 +28,7 @@ app.use(addLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(session({
-  store: new MongoStore({
-    mongoUrl: options.mongoDB.url,
-    ttl: 3600
-  }),
-  secret: options.server.secretSession,
-  resave: false,
-  saveUninitialized: false
-}));
+mongoDB(app);
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
