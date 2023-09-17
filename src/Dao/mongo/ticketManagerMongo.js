@@ -1,9 +1,9 @@
-import cartModel from '../../models/cart.model.js';
-import ticketModel from '../../models/ticket.model.js';
-import userModel from '../../models/user.model.js';
-import { code } from '../../../helpers/codeGenerator.js';
-import { date } from '../../../helpers/dateGenerator.js';
-import { sendMailTicket } from '../../../helpers/sendMailTicket.js';
+import cartModel from '../models/cart.model.js';
+import ticketModel from '../models/ticket.model.js';
+import userModel from '../models/user.model.js';
+import { code } from '../../helpers/codeGenerator.js';
+import { date } from '../../helpers/dateGenerator.js';
+import { sendMailTicket } from '../../helpers/sendMailTicket.js';
 
 export default class TicketManagerMongo {
   async purchaseCart (idCart) {

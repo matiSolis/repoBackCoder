@@ -1,5 +1,5 @@
-import CartManagerMongo from '../Dao/managers/mongo/cartManagerMongo.js';
-import TicketManagerMongo from '../Dao/managers/mongo/ticketManagerMongo.js';
+import CartManagerMongo from '../Dao/mongo/cartManagerMongo.js';
+import TicketManagerMongo from '../Dao/mongo/ticketManagerMongo.js';
 import { EError } from '../enums/EError.js';
 import { generateErrorParam } from '../services/error/errorParam.js';
 import { generateQuantityErrorInfo } from '../services/error/errorInfo.js';

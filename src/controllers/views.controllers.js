@@ -1,5 +1,5 @@
-import ViewsManagerMongo from '../Dao/managers/mongo/viewsManagerMongo.js';
-import ProductManagerMongo from '../Dao/managers/mongo/productManagerMongo.js';
+import ViewsManagerMongo from '../Dao/mongo/viewsManagerMongo.js';
+import ProductManagerMongo from '../Dao/mongo/productManagerMongo.js';
 
 const viewsManagerMongo = new ViewsManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
@@ -25,6 +25,19 @@ export default class ViewsController {
     try {
       const products = await productManagerMongo.productsFindLean();
       res.render('admin', { user: req.session.user, products });
+    } catch (error) {
+      res.status(500).send({
+        status: 'Error',
+        msg: 'Error del servidor.'
+      });
+    };
+  };
+
+  // render de la page user premium
+  async premiumRender (req, res) {
+    try {
+      const products = await productManagerMongo.productsFindLean();
+      res.render('premiumUser', { user: req.session.user, products });
     } catch (error) {
       res.status(500).send({
         status: 'Error',

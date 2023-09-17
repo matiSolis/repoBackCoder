@@ -1,0 +1,67 @@
+<div>
+    <nav class="navbar navbar-expand-lg bg-body-$green-900" style="width: 100%;">
+        <div class="container-fluid">
+            <a class="navbar-brand">EL EMPORIO DEL JARDIN</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">PRODUCTOS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">AGREGAR PRODUCTOS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/carts/{{user.cart}}">CARRITO</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle bg-body-$green-900" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PERFIL</a>
+                        <ul class="dropdown-menu bg-body-$green-900" style="background-color: #74ec9e; border-style: none">
+                            <div>
+                                <p>NOMBRE:  {{user.first_name}}</p>
+                                <p>APELLIDO:  {{user.last_name}}</p>
+                                <p>EMAIL:  {{user.email}}</p>
+                                <li><hr class="dropdown-divider"></li>
+                                <div class="dropNav">
+                                    <a href="/api/session/logout"><button class="inputButton2">Cerrar sesion</button></a>
+                                </div>
+                            </div>
+                        </ul>
+                </li>
+            </ul>
+            <form class="d-flex" role="search" action="/products" method="get">
+                <input class="form-control me-2" type="text" name="query" placeholder="Buscar producto..." aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            </div>
+        </div>
+    </nav>
+    <h1 class="title">EL EMPORIO DEL JARDIN</h1>
+    <p class="title">¡Explora el Emporio del Jardín, tu mejor aliado en la pasión por la jardinería en Argentina!<br>Sumérgete en un mundo de insumos excepcionales diseñados para realzar la belleza natural de tus espacios verdes. Nuestra dedicación y experiencia nos han convertido en la distribuidora más grande y confiable de productos de jardinería en todo el país.<br>Descubre nuestro amplio catálogo de productos de calidad, desde herramientas especializadas hasta soluciones para el cuidado de tus plantas. Estamos comprometidos a brindarte acceso a lo mejor en el mundo de la jardinería, ayudándote a convertir tus proyectos en hermosas realidades.<br>Te damos la bienvenida a una comunidad de entusiastas de la jardinería. Gracias por elegir al Emporio del Jardín como tu compañero en cada paso hacia un espacio exterior vibrante y encantador.<br>¡Esperamos acompañarte en tu emocionante viaje verde!</p>
+    {{#if message}}
+        <div class="alert alert-warning">{{message}}</div>
+    {{/if}}
+    <div class="gallery">
+        {{#each products}}
+            <div class="product">
+                <h2>{{this.title}}</h2>
+                <h5 class="divisorProduct"></h5>
+                <img src="{{this.thumbnail}}" alt="{{this.title}}">
+                <h5 class="divisorProduct"></h5>
+                <p>Descripcion: {{this.description}}</p>
+                <p>Precio: ${{this.price}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <h5 class="divisorProduct"></h5>
+                <div class="divBottomProducts">
+                    <button data-id="{{ this._id }}" data-cart-id="{{ ../user.cartId }}" class="inputButton2 cartButton" >Agregar al carrito</button>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+

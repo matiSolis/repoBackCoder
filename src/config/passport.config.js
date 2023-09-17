@@ -4,67 +4,76 @@ import local from 'passport-local';
 import GitHubStrategy from 'passport-github2';
 import { validatePassword } from '../helpers/hashAndValidate.js';
 import userModel from '../Dao/models/user.model.js';
-import UserManagerMongo from '../Dao/managers/mongo/userManagerMongo.js';
+import UserManagerMongo from '../Dao/mongo/userManagerMongo.js';
 // import { ContactRepository } from '../repository/user.repository.js';
 import CartModel from '../Dao/models/cart.model.js';
 import { dateConnection } from '../helpers/dateConnection.js';
-import UserController from '../controllers/user.controllers.js';
+// import UserController from '../controllers/user.controllers.js';
 
-const userController = new UserController();
+// const userController = new UserController();
 const userManagerMongo = new UserManagerMongo();
 const cartModel = new CartModel();
 const LocalStrategy = local.Strategy;
 
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  const user = await userModel.findById(id);
-  done(null, user);
-});
-
 const initializePassport = () => {
-  passport.use('register', new LocalStrategy(
-    { passReqToCallback: true, usernameField: 'email' },
-    async (req, username, password, done) => {
-      const { first_name, last_name, email, age } = req.body;
-      try {
-        const newUser = await userController.createUser(
-          first_name,
-          last_name,
-          email,
-          age,
-          password,
-          username
-        );
-        if (!newUser) {
-          return done(null, false, { message: 'El usuario ya existe.' });
-        };
-        return done(null, newUser, { message: 'Usuario registrado exitosamente' });
-      } catch (error) {
-        return done('Error al registrar el usuario: ' + error);
-      }
-    }
-  ));
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
 
-  passport.use('login', new LocalStrategy(
-    { usernameField: 'email' },
-    async (username, password, done) => {
-      try {
-        const user = await userModel.findOne({ email: username });
-        if (!user) {
-          return done(null, false);
+  passport.deserializeUser(async (id, done) => {
+    const user = await userModel.findById(id);
+    done(null, user);
+  });
+
+  passport.use(
+    'register',
+    new LocalStrategy(
+      { passReqToCallback: true, usernameField: 'email' },
+      async (req, username, password, done) => {
+        const { first_name, last_name, email, age, role } = req.body;
+        try {
+          const newUser = await userManagerMongo.addUser(
+            first_name,
+            last_name,
+            age,
+            email,
+            password,
+            role,
+            username
+          );
+          if (!newUser) {
+            const errorMessage = 'El usuario ya existe en la base de datos';
+            return done(null, false, errorMessage);
+          }
+          return done(null, newUser);
+        } catch (error) {
+          return done('Error al registrar el usuario: ' + error);
         }
-        if (!validatePassword(password, user)) {
-          return done(null, false);
-        }
-        return done(null, user);
-      } catch (error) {
-        return done('Error al intentar ingresar: ' + error);
       }
-    }
-  ));
+    )
+  );
+
+  passport.use(
+    'login',
+    new LocalStrategy(
+      { usernameField: 'email' },
+      async (username, password, done) => {
+        try {
+          const user = await userManagerMongo.login(username);
+          if (!user) {
+            console.log('No existe el usuario');
+            return done(null, false);
+          }
+          if (!validatePassword(password, user)) return done(null, false);
+          user.last_connection = dateConnection();
+          await user.save();
+          return done(null, user);
+        } catch (error) {
+          return done('Error al intentar ingresar: ' + error);
+        }
+      }
+    )
+  );
 
   passport.use('github', new GitHubStrategy(
     {
@@ -82,8 +91,8 @@ const initializePassport = () => {
           const newUser = {
             first_name: nameParts[0],
             last_name: nameParts[1] || '',
-            email,
             age: 18,
+            email,
             password: '1234',
             cart: newCart._id,
             last_connection: dateConnection()

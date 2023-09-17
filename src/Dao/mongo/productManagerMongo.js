@@ -1,13 +1,13 @@
-import productModel from '../../models/products.model.js';
+import productModel from '../models/products.model.js';
 
 export default class ProductManagerMongo {
   // crea un producto
   async addProduct (productData) {
-    const { title, description, price, category, thumbnail, code, stock } = productData;
-    if (!title || !description || !price || !category || !thumbnail || !code || !stock) {
+    const { title, description, category, price, thumbnail, code, stock, owner } = productData;
+    if (!title || !description || !category || !price || !thumbnail || !code || !stock || !owner) {
       throw new Error('Faltan datos');
     };
-    const product = { title, description, price, category, thumbnail, code, stock };
+    const product = { title, description, category, price, thumbnail, code, stock, owner };
     const result = await productModel.create(product);
     return result;
   };

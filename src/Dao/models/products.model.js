@@ -40,7 +40,6 @@ const schema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    enum: ['Admin', 'Premium'],
     ref: 'users'
   }
 });

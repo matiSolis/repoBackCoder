@@ -1,10 +1,9 @@
-import ProductManagerMongo from '../Dao/managers/mongo/productManagerMongo.js';
-import UserManagerMongo from '../Dao/managers/mongo/userManagerMongo.js';
+import ProductManagerMongo from '../Dao/mongo/productManagerMongo.js';
+import UserManagerMongo from '../Dao/mongo/userManagerMongo.js';
 import { EError } from '../enums/EError.js';
 import { generateErrorParam } from '../services/error/errorParam.js';
 import { generateProductErrorInfo } from '../services/error/errorInfo.js';
 import CustomError from '../services/error/errorConstructor/customError.service.js';
-import { generateProductFaker } from '../helpers/createFakerProducts.js';
 import { sendMailProductPremiumDeleted } from '../helpers/sendMailProductPremiumDeleted.js';
 
 const productManagerMongo = new ProductManagerMongo();
@@ -46,8 +45,9 @@ export default class ProductController {
   // le modifica el owner a premium
   async addProduct (req, res) {
     try {
-      const { title, description, price, category, thumbnail, code, stock } = req.body;
-      if (!title || !description || !price || !category || !thumbnail || !code || !stock) {
+      const { title, description, category, price, thumbnail, code, stock, owner } = req.body;
+      console.log(req.body);
+      if (!title || !description || !category || !price || !thumbnail || !code || !stock || !owner) {
         customError.createError({
           name: 'Product create error',
           cause: generateProductErrorInfo(req.body),
@@ -55,16 +55,16 @@ export default class ProductController {
           errorCode: EError.INVALID_JSON
         });
       };
-      let owner = 'Admin';
-      const userRole = req.session.user.role;
-      if (userRole === 'Premium') {
-        owner = 'Premium';
-      }
+      // let owner = 'Admin';
+      // const userRole = req.session.user.role;
+      // if (userRole === 'Premium') {
+      //   owner = 'Premium';
+      // }
       const productData = {
         title,
         description,
-        price,
         category,
+        price,
         thumbnail,
         code,
         stock,
@@ -73,6 +73,7 @@ export default class ProductController {
       await productManagerMongo.addProduct(productData);
       res.status(200).send({ msg: 'Producto creado exitosamente' });
     } catch (error) {
+      console.error(error);
       res.status(500).send({ error: 'Error interno del servidor' });
     };
   };
@@ -133,21 +134,6 @@ export default class ProductController {
       res.status(200).send({ msg: 'Producto actualizado exitosamente' });
     } catch (error) {
       res.status(500).send({ error: 'Error interno del servidor' });
-    };
-  };
-
-  // crea una cantidad de productos x, o si no definimos la cantidad crea 100 productos falsos
-  async generateProductsFaker (req, res) {
-    try {
-      const cant = parseInt(req.query.cant) || 100;
-      const products = [];
-      for (let i = 0; i < cant; i++) {
-        const product = generateProductFaker();
-        products.push(product);
-      };
-      res.json({ products });
-    } catch (error) {
-      throw new Error(error);
     };
   };
 };

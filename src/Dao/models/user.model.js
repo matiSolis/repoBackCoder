@@ -32,7 +32,7 @@ const schema = new mongoose.Schema({
     default: 'User'
   },
   last_connection: {
-    type: Date,
+    type: String,
     default: null
   },
   products: {
