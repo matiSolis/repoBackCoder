@@ -9,8 +9,8 @@ router.get('/', userController.getAllUsers);
 router.get('/:uid', userController.findUserById);
 router.get('/cart/:cid', userController.findUserByCartId);
 router.post('/', userController.createUser);
+router.get('/admin/', adminSession, userController.getAllUsersAdmin);
 router.put('/admin/editrole/:uid', adminSession, userController.editUserRole);
 router.delete('admin/:uid', adminSession, userController.deleteUserById);
-router.delete('admin/', adminSession, userController.deleteInactiveUser);
-
+router.delete('admin/deleteInactiveUser', adminSession, userController.deleteInactiveUser);
 export default router;

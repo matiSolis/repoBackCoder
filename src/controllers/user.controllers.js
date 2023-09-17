@@ -12,9 +12,30 @@ const userManagerMongo = new UserManagerMongo();
 
 export default class UserController {
   // Obtener todos los usuarios
-  async getAllUsers (req, res) {
+  async getAllUsersAdmin (req, res) {
     try {
       const users = await userModel.find().lean().exec();
+      const data = users.map((user) => {
+        return {
+          _id: user._id,
+          first_name: user.first_name,
+          email: user.email,
+          cart: user.cart,
+          role: user.role
+        };
+      });
+      res.json({ status: 'succes', payload: data });
+    } catch (error) {
+      res.status(400).send({
+        status: 'Error',
+        msg: 'El total de usuarios no se puede visualizar.'
+      });
+    }
+  };
+
+  async getAllUsers (req, res) {
+    try {
+      const users = await userModel.find();
       const data = users.map((user) => {
         return {
           _id: user._id,

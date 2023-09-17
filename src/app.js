@@ -35,6 +35,8 @@ app.use(passport.session());
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
+app.use('/public/js', express.static(__dirname + '/public/js', { extensions: ['js'] }));
+
 // vistas
 app.use('/', viewsRouter);
 app.use('/admin', adminRouter);

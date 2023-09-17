@@ -1,5 +1,6 @@
 import ViewsManagerMongo from '../Dao/mongo/viewsManagerMongo.js';
 import ProductManagerMongo from '../Dao/mongo/productManagerMongo.js';
+import userModel from '../Dao/models/user.model.js';
 
 const viewsManagerMongo = new ViewsManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
@@ -23,8 +24,9 @@ export default class ViewsController {
   // render de la page admin
   async adminRender (req, res) {
     try {
+      const users = await userModel.find().lean().exec();
       const products = await productManagerMongo.productsFindLean();
-      res.render('admin', { user: req.session.user, products });
+      res.render('admin', { user: req.session.user, products, users });
     } catch (error) {
       res.status(500).send({
         status: 'Error',

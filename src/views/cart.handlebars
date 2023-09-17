@@ -54,8 +54,8 @@
     </div>
     <div>
         <h2>Total: ${{total}}</h2>
-        <div>
-            <a href="/api/carts/{{user.cart}}/purchase"><button class="inputButton2">Finalizar compra</button></a>
-        </div>
+        <button id="finalizarCompraButton" class="inputButton2" data-cart-id={{user.cart}}>Finalizar compra</button>
     </div>
 </div>
+
+<script src="/public/js/cartButton.js"></script>

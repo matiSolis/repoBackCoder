@@ -1,24 +1,18 @@
 /* eslint-disable no-unused-vars */
-function editRole (userId) {
+async function editRole (userId) {
   const select = document.getElementById(`edit_role_${userId}`);
-  const newRole = select.value;
-  fetch(`/api/users/admin/editrole/${userId}`, {
-    method: 'PUT',
-    body: JSON.stringify({ role: newRole }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then((response) => {
-      if (response.ok) {
-        console.log('Rol actualizado correctamente');
-      } else {
-        console.error('Error al actualizar el rol');
+  const selectedRole = select.value;
+  try {
+    const result = await fetch(`/api/users/admin/editrole/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ role: selectedRole }),
+      headers: {
+        'Content-Type': 'application/json'
       }
-    })
-    .catch((error) => {
-      console.error('Error en la solicitud:', error);
     });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 function deleteUser (userId) {

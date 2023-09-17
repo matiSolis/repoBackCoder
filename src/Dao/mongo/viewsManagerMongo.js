@@ -34,7 +34,7 @@ export default class ViewsManagerMongo {
     }
   };
 
-  async purchase (req, res) {
+  async purchaseRender (req, res) {
     try {
       const { cid } = req.params;
       const cart = await cartModel.findById(cid);

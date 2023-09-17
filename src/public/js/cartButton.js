@@ -41,3 +41,28 @@ addToCartButtons.forEach((button) => {
     }
   });
 });
+
+const finalizarCompraButton = document.getElementById('finalizarCompraButton');
+finalizarCompraButton.addEventListener('click', async (e) => {
+  e.preventDefault();
+  const cartId = e.target.dataset.cartId;
+  console.log(cartId);
+  try {
+    const response = await fetch(`/api/carts/${cartId}/purchase`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (response.status === 200) {
+      const data = await response.json();
+      window.location.href = '/';
+      console.log('Compra exitosa y correo electrónico enviado.');
+    } else {
+      const errorData = await response.json();
+      console.error('Error en la compra:', errorData.error);
+    }
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+  }
+});

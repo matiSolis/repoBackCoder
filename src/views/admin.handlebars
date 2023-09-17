@@ -46,11 +46,7 @@
             </div>
         {{/each}}
     </div>
-        <table
-      id="table_users"
-      class="table table-striped table-bordered"
-      style="width: 100%;"
-    >
+    <table class="table table-striped table-bordered" style="width: 100%;">
       <thead>
         <th>Nombre</th>
         <th>Email</th>
@@ -66,12 +62,12 @@
             <td>{{this.email}}</td>
             <td>{{this.role}}</td>
             <td class="flex justify-center">
-              <select id="edit_role_{{this._id}}">
-                <option value="disabled selected">Select Role</option>
-                <option value="user">User</option>
-                <option value="premium">Premium</option>
-                <option value="admin">Admin</option>
-              </select>
+                <select id="edit_role_{{this._id}}">
+                    <option value="disabled selected">Select Role</option>
+                    <option value="user">User</option>
+                    <option value="premium">Premium</option>
+                    <option value="admin">Admin</option>
+                </select>
             </td>
             <td>
                 <button onclick="deleteUser('{{this._id}}')">Delete</button>
@@ -81,16 +77,14 @@
             </td>
           </tr>
         {{/each}}
-
       </tbody>
-
     </table>
-    <div>
+    {{!-- <div>
         {{#if prevPage}}
             <a href="/products?{{#if urlParams.query}}query={{urlParams.query}}&{{/if}}{{#if urlParams.sort}}sort={{urlParams.sort}}&{{/if}}{{#if urlParams.category}}category={{urlParams.category}}&{{/if}}page={{prevPage}}"><button class="button2">Anterior</button></a>
         {{/if}}
         {{#if nextPage}}
             <a href="/products?{{#if urlParams.query}}query={{urlParams.query}}&{{/if}}{{#if urlParams.sort}}sort={{urlParams.sort}}&{{/if}}{{#if urlParams.category}}category={{urlParams.category}}&{{/if}}page={{nextPage}}"><button class="button2">Siguiente</button></a>
         {{/if}}
-    </div>
+    </div> --}}
 </div>
