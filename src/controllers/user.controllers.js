@@ -7,6 +7,7 @@ import { generateErrorParam } from '../services/error/errorParam.js';
 import CustomError from '../services/error/errorConstructor/customError.service.js';
 import { sendMailRegister } from '../helpers/sendMailRegister.js';
 import userModel from '../Dao/models/user.model.js';
+import cartModel from '../Dao/models/cart.model.js';
 
 const userManagerMongo = new UserManagerMongo();
 
@@ -132,23 +133,45 @@ export default class UserController {
   async deleteUserById (req, res, next) {
     try {
       const idUser = req.params.uid;
-      const result = await userManagerMongo.deleteUserById(idUser);
-      if (!result) {
+      const user = await userModel.findById(idUser);
+      if (!user) {
         CustomError.createError({
-          name: 'User deleted by id error',
-          cause: 'Error eliminando el usuario por el id.',
+          name: 'User not found error',
+          cause: 'Usuario no encontrado.',
           message: generateErrorParam(idUser),
           errorCode: EError.INVALID_PARAM
         });
-      };
+      }
+      const cartId = user.cart;
+      if (cartId) {
+        const cartDeleted = await cartModel.findByIdAndDelete(cartId);
+        if (!cartDeleted) {
+          CustomError.createError({
+            name: 'Cart not deleted error',
+            cause: 'Error eliminando el carrito por el ID.',
+            message: generateErrorParam(cartId),
+            errorCode: EError.INVALID_PARAM
+          });
+        }
+      }
+      const result = await userModel.findByIdAndDelete(idUser);
+      if (!result) {
+        CustomError.createError({
+          name: 'User deleted by id error',
+          cause: 'Error eliminando el usuario por el ID.',
+          message: generateErrorParam(idUser),
+          errorCode: EError.INVALID_PARAM
+        });
+      }
       res.status(200).send({
         status: 'success',
         result
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
-  };
+  }
 
   // Elimina usuario inactivo por dos dias
   async deleteInactiveUser (req, res, next) {

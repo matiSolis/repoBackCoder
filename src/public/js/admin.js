@@ -10,6 +10,7 @@ async function editRole (userId) {
         'Content-Type': 'application/json'
       }
     });
+    window.location.href = '/';
   } catch (error) {
     console.log(error);
   }
@@ -22,6 +23,7 @@ function deleteUser (userId) {
     .then((response) => {
       if (response.ok) {
         console.log('Usuario eliminado correctamente');
+        window.location.href = '/';
       } else {
         console.error('Error al eliminar el usuario');
       }
