@@ -36,12 +36,13 @@
                 <p>Category: {{this.category}}</p>
                 <p>Price: {{this.price}}</p>
                 <p>Stock: {{this.stock}}</p>
+                <p>Owner: {{this.owner}}</p>
                 <div>
                     <button>EDITAR PRODUCTO</button>
                 </div>
                 <br>
                 <div>
-                    <button>ELIMINAR PRODUCTO</button>
+                    <button onclick="deleteProduct('{{this._id}}')">ELIMINAR PRODUCTO</button>
                 </div>
             </div>
         {{/each}}

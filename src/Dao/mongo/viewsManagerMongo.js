@@ -94,7 +94,6 @@ export default class ViewsManagerMongo {
   async productsRender (req, res) {
     try {
       const { page = 1, limit, query, sort, category } = req.query;
-      const user = req.session.user;
       const opt = { page, limit: parseInt(limit) || 6, lean: true };
       if (sort) {
         opt.sort = { [sort]: 1 };
