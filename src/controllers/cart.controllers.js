@@ -4,6 +4,7 @@ import { EError } from '../enums/EError.js';
 import { generateErrorParam } from '../services/error/errorParam.js';
 import { generateQuantityErrorInfo } from '../services/error/errorInfo.js';
 import CustomError from '../services/error/errorConstructor/customError.service.js';
+import productModel from '../Dao/models/products.model.js';
 
 const cartManagerMongo = new CartManagerMongo();
 const ticketManagerMongo = new TicketManagerMongo();
@@ -86,20 +87,16 @@ export default class CartController {
   // agregar productos por id en el cart seleccionado
   async addProductInCart (req, res, next) {
     try {
-      const idCart = req.params.cid;
+      const idCart = req.session?.user?.cart;
       const idProduct = req.params.pid;
-      // CustomError.createError({
-      //   name: 'Cart get by id error',
-      //   cause: generateErrorParam(idCart),
-      //   message: 'Error obteniendo el carrito por el id.',
-      //   errorCode: EError.INVALID_PARAM
-      // });
-      // CustomError.createError({
-      //   name: 'Product get by id error',
-      //   cause: generateErrorParam(idProduct),
-      //   message: 'Error obteniendo el uproducto por el id',
-      //   errorCode: EError.INVALID_PARAM
-      // });
+      const idUser = req.user.id.toString();
+      const product = await productModel.findById(idProduct);
+      const productOwner = product.owner?.toString();
+      if (productOwner === idUser) {
+        return res
+          .status(404)
+          .send({ error: 'No puedes agregar este producto al carrito' });
+      }
       const result = await cartManagerMongo.addProductInCart(idCart, idProduct);
       return res.status(200).send({
         status: 'success',

@@ -1,9 +1,9 @@
 const addToCartButtons = document.querySelectorAll('.cartButton');
 addToCartButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const productId = button.getAttribute('data-product-id');
-    const userId = button.getAttribute('data-user-id');
-    const cartId = button.getAttribute('data-cart-id');
+  button.addEventListener('click', (e) => {
+    const productId = e.target.getAttribute('data-product-id');
+    const userId = e.target.getAttribute('data-user-id');
+    const cartId = e.target.getAttribute('data-cart-id');
     console.log(`productId: ${productId}`);
     console.log(`userId: ${userId}`);
     console.log(`cartId: ${cartId}`);

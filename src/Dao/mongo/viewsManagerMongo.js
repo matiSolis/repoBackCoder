@@ -94,6 +94,7 @@ export default class ViewsManagerMongo {
   async productsRender (req, res) {
     try {
       const { page = 1, limit, query, sort, category } = req.query;
+      const user = req.session.user;
       const opt = { page, limit: parseInt(limit) || 6, lean: true };
       if (sort) {
         opt.sort = { [sort]: 1 };
@@ -118,7 +119,6 @@ export default class ViewsManagerMongo {
       const urlParams = { page, limit, query, sort, category };
       res.render('prod', {
         title: 'EL EMPORIO DEL JARDIN',
-        user: req.session.user,
         status,
         totalpage,
         products,
@@ -128,7 +128,8 @@ export default class ViewsManagerMongo {
         prevPage,
         query,
         message,
-        urlParams
+        urlParams,
+        user
       });
     } catch (error) {
       res.status(500).send({
