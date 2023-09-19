@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { transporter } from '../../config/gmail.js';
-
 const emailTemplate = `<div>
 <h1>PRODUCTO ELIMINADO</h1>
 <img src="https://paissano.com/wp-content/uploads/2018/07/Proyecto-de-Jardiner%C3%ADa.jpg" style="width:250px"/>
@@ -12,16 +10,6 @@ Este email ha sido generado automaticamente, no respondas a el.
 <p>Si quieres desuscribirte de nuestros descuentos semanales, clickea <a href="https://www.google.com/">AQUI</a></p>
 
 </div>`;
-
-async function sendMailProductPremiumDeleted (user) {
-  const email = await transporter.sendMail({
-    from: 'EL EMPORIO DEL JARDIN',
-    to: `${user.email}`,
-    subject: 'Producto eliminado',
-    html: emailTemplate
-  });
-  return email;
-};
 
 async function editRole (userId) {
   const select = document.getElementById(`edit_role_${userId}`);
@@ -57,42 +45,50 @@ function deleteUser (userId) {
     });
 };
 
-function deleteProduct (productId) {
-  // Obtener el usuario actual desde la plantilla Handlebars (asegúrate de que esté disponible)
-  const userId = '{{user._id}}';
-  // Realizar una solicitud para obtener la lista de todos los usuarios
-  fetch('/api/users')
-    .then((response) => response.json())
-    .then((usersData) => {
-      if (usersData.status === 'succes') {
-        // Verificar si el producto pertenece a alguno de los usuarios
-        const productOwner = product.owner;
-        const userWithEmail = usersData.payload.find((user) => user.email === productOwner);
+// function deleteProduct (productId) {
+//   // Obtener el usuario actual desde la plantilla Handlebars (asegúrate de que esté disponible)
+//   const userId = '{{user._id}}';
+//   // Realizar una solicitud para obtener la lista de todos los usuarios
+//   fetch('/api/users')
+//     .then((response) => response.json())
+//     .then((usersData) => {
+//       if (usersData.status === 'succes') {
+//         // Verificar si el producto pertenece a alguno de los usuarios
+//         const productOwner = product.owner;
+//         const userWithEmail = usersData.payload.find((user) => user.email === productOwner);
 
-        if (userWithEmail && userWithEmail._id === userId) {
-          // Si el propietario coincide con el usuario, enviar el correo
-          sendMailProductPremiumDeleted(userId);
-        }
-        // Ahora procede a eliminar el producto
-        fetch(`/api/products/${productId}`, {
-          method: 'DELETE'
-        })
-          .then((response) => {
-            if (response.ok) {
-              console.log('Producto eliminado correctamente');
-              window.location.href = '/';
-            } else {
-              console.log('Error al eliminar el producto');
-            }
-          })
-          .catch((error) => {
-            console.error('Error en la solicitud:', error);
-          });
-      } else {
-        console.log('Error al obtener la lista de usuarios');
-      }
-    })
-    .catch((error) => {
-      console.error('Error en la solicitud:', error);
-    });
-};
+//         if (userWithEmail && userWithEmail._id === userId) {
+//           // Si el propietario coincide con el usuario, enviar el correo
+//           async function sendMailProductPremiumDeleted (userId) {
+//             const email = await transporter.sendMail({
+//               from: 'EL EMPORIO DEL JARDIN',
+//               to: `${user.email}`,
+//               subject: 'Producto eliminado',
+//               html: emailTemplate
+//             });
+//             return email;
+//           };
+//         }
+//         // Ahora procede a eliminar el producto
+//         fetch(`/api/products/${productId}`, {
+//           method: 'DELETE'
+//         })
+//           .then((response) => {
+//             if (response.ok) {
+//               console.log('Producto eliminado correctamente');
+//               window.location.href = '/';
+//             } else {
+//               console.log('Error al eliminar el producto');
+//             }
+//           })
+//           .catch((error) => {
+//             console.error('Error en la solicitud:', error);
+//           });
+//       } else {
+//         console.log('Error al obtener la lista de usuarios');
+//       }
+//     })
+//     .catch((error) => {
+//       console.error('Error en la solicitud:', error);
+//     });
+// };
