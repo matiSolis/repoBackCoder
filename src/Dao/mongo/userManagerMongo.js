@@ -126,30 +126,28 @@ export default class UserManagerMongo {
   deleteInactiveUsers = async () => {
     const twoDaysAgo = new Date();
     twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-  
     try {
       const usersToDelete = await userModel.find({
         last_connection: { $lte: twoDaysAgo },
-        role: { $nin: ['Admin', 'Premium'] } // Excluir Admin y Premium
+        role: { $nin: ['Admin', 'Premium'] }
       });
-  
       if (usersToDelete.length > 0) {
         const deletedUserIds = usersToDelete.map(user => user._id);
-        
-        // Elimina los carritos de los usuarios eliminados
-        await cartManagerMongo.deleteCartsByUserIds(deletedUserIds);
-        
-        // Envía un correo electrónico a cada usuario eliminado
+        const promises = [];
         for (const user of usersToDelete) {
-          await sendMailUserDeleted(user);
+          promises.push(sendMailUserDeleted(user).catch(error => {
+            console.error(`Error al enviar correo electrónico a ${user.first_name}: ${error}`);
+          }));
         }
-  
-        // Elimina los usuarios inactivos
+        await Promise.all(promises);
         const deleteResult = await userModel.deleteMany({
           _id: { $in: deletedUserIds }
         });
-  
-        console.log(`Se eliminaron ${deleteResult.deletedCount} usuarios inactivos.`);
+        if (deleteResult.deletedCount > 0) {
+          console.log(`Se eliminaron ${deleteResult.deletedCount} usuarios inactivos.`);
+        } else {
+          console.log('No se eliminaron usuarios inactivos.');
+        }
       } else {
         console.log('No hay usuarios inactivos para eliminar.');
       }
@@ -157,6 +155,7 @@ export default class UserManagerMongo {
       console.error('Error al eliminar usuarios inactivos:', error);
     }
   };
+  
   
   
   // Edita el role del usuario

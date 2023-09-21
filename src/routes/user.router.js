@@ -12,5 +12,8 @@ router.post('/', userController.createUser);
 router.get('/admin/', adminSession, userController.getAllUsersAdmin);
 router.put('/admin/editrole/:uid', adminSession, userController.editUserRole);
 router.delete('/admin/:uid', adminSession, userController.deleteUserById);
-router.delete('/admin/deleteInactiveUsers', userController.deleteInactiveUsers);
+// Cuando al endpoint lo pongo en DELETE no funciona, pero si lo dejo en get funciona. No se que pasa
+// router.delete('/admin/deleteInactiveUsers', userController.deleteInactiveUsers);
+router.get('/admin/deleteInactiveUsers', userController.deleteInactiveUsers);
+
 export default router;
