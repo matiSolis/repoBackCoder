@@ -83,16 +83,17 @@ export default class ProductController {
   async deleteProductById (req, res) {
     try {
       const idProduct = req.params.pid;
-      customError.createError({
-        name: 'Product get by id error',
-        cause: generateErrorParam(idProduct),
-        message: 'Error obteniendo el uproducto por el id',
-        errorCode: EError.INVALID_PARAM
-      });
-      const product = await ProductController.getProductById(idProduct);
-      if (product.owner === 'Premium') {
-        const findOwner = await userManagerMongo.findUserById(product.owner);
-        await sendMailProductPremiumDeleted(findOwner);
+      console.log(idProduct);
+      // customError.createError({
+      //   name: 'Product get by id error',
+      //   cause: generateErrorParam(idProduct),
+      //   message: 'Error obteniendo el uproducto por el id',
+      //   errorCode: EError.INVALID_PARAM
+      // });
+      const product = await productManagerMongo.getProductById(idProduct);
+      const findOwner = await userManagerMongo.findUserById(product.owner);
+      if (String(product.owner._id) === String(findOwner.id)) {
+        await sendMailProductPremiumDeleted(findOwner.email);
       }
       await productManagerMongo.deleteProductById(idProduct);
       res.status(200).send({ msg: 'Producto eliminado exitosamente' });

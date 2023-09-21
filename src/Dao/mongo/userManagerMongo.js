@@ -3,6 +3,7 @@ import userModel from '../models/user.model.js';
 import CartManagerMongo from './cartManagerMongo.js';
 import { createHash } from '../../helpers/hashAndValidate.js';
 import { sendMailUserDeleted } from '../../helpers/sendMailUserDeleted.js';
+import { dateConnection } from '../../helpers/dateConnection.js';
 
 const cartManagerMongo = new CartManagerMongo();
 
@@ -95,7 +96,7 @@ export default class UserManagerMongo {
     if (!user) {
       throw new Error('Usuario inexistente.');
     } else {
-      const cartId = user.cart.toString();
+      const cartId = user.cart._id.toString();
       console.log(cartId + ' esta aca');
       const deleteCart = await cartManagerMongo.deleteCart(cartId);
       console.log(deleteCart);
@@ -114,26 +115,50 @@ export default class UserManagerMongo {
         first_name: user.first_name,
         email: user.email,
         cart: user.cart,
-        role: user.role
+        role: user.role,
+        last_connection: user.last_connection
       };
     });
     res.json({ status: 'succes', payload: data });
   };
 
   // elimina un usuario inactivo luego de un determinado tiempo
-  async deleteInactiveUsers () {
+  deleteInactiveUsers = async () => {
     const twoDaysAgo = new Date();
     twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const deletedUsers = await userModel.deleteMany({
-      last_connection: { $lte: twoDaysAgo },
-      role: { $ne: 'Admin' } // con esto evito eliminar admins
-    });
-    for (const user of deletedUsers) {
-      await sendMailUserDeleted(user);
+  
+    try {
+      const usersToDelete = await userModel.find({
+        last_connection: { $lte: twoDaysAgo },
+        role: { $nin: ['Admin', 'Premium'] } // Excluir Admin y Premium
+      });
+  
+      if (usersToDelete.length > 0) {
+        const deletedUserIds = usersToDelete.map(user => user._id);
+        
+        // Elimina los carritos de los usuarios eliminados
+        await cartManagerMongo.deleteCartsByUserIds(deletedUserIds);
+        
+        // Envía un correo electrónico a cada usuario eliminado
+        for (const user of usersToDelete) {
+          await sendMailUserDeleted(user);
+        }
+  
+        // Elimina los usuarios inactivos
+        const deleteResult = await userModel.deleteMany({
+          _id: { $in: deletedUserIds }
+        });
+  
+        console.log(`Se eliminaron ${deleteResult.deletedCount} usuarios inactivos.`);
+      } else {
+        console.log('No hay usuarios inactivos para eliminar.');
+      }
+    } catch (error) {
+      console.error('Error al eliminar usuarios inactivos:', error);
     }
-    console.log(`Se eliminaron ${deletedUsers.deletedCount} usuarios inactivos.`);
-  }
-
+  };
+  
+  
   // Edita el role del usuario
   editUserRole = async (req, res) => {
     try {

@@ -20,14 +20,15 @@ export default class ProductManagerMongo {
 
   // trae un producto por su id
   async getProductById (idProduct) {
-    const product = await productModel.find({ _id: idProduct });
+    const product = await productModel.findById(idProduct);
+    console.log(product)
     return product;
   };
 
   // borrra un producto por su id
   async deleteProductById (idProduct) {
-    await productModel.deleteOne({ _id: idProduct });
-    return this.getProducts();
+    const result = await productModel.findByIdAndDelete(idProduct);
+    return result;
   };
 
   // busca un producto por su id y modifica las value

@@ -6,8 +6,8 @@ const router = Router();
 const productController = new ProductController();
 
 router.get('/', productController.getProducts);
-router.post('/', adminSession, premiumSession, productController.addProduct);
 router.get('/:pid', productController.getProductById);
 router.put('/:pid', productController.updateProductById);
+router.post('/', adminSession, productController.addProduct);
 router.delete('/:pid', adminSession, productController.deleteProductById);
 export default router;

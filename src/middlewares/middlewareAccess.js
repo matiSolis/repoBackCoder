@@ -12,7 +12,7 @@ export const adminSession = (req, res, next) => {
 
 export const premiumSession = (req, res, next) => {
   if (req.session.user.role !== 'Premium') {
-    return res.status(403).send({ error: { status: 403, message: 'Access denied.' } });
+    return res.status(403).send({ error: { status: 403, message: 'Access denied.....' } });
   };
   next();
 };

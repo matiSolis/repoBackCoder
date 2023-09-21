@@ -37,9 +37,6 @@
                 <p>Price: {{this.price}}</p>
                 <p>Stock: {{this.stock}}</p>
                 <p>Owner: {{this.owner}}</p>
-                <div>
-                    <button>EDITAR PRODUCTO</button>
-                </div>
                 <br>
                 <div>
                     <button onclick="deleteProduct('{{this._id}}')">ELIMINAR PRODUCTO</button>
@@ -64,9 +61,9 @@
             <td>{{this.role}}</td>
             <td class="flex justify-center">
                 <select id="edit_role_{{this._id}}">
-                    <option value="user">User</option>
-                    <option value="premium">Premium</option>
-                    <option value="admin">Admin</option>
+                    <option value="User">User</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Admin">Admin</option>
                 </select>
             </td>
             <td>

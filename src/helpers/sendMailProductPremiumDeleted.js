@@ -12,12 +12,13 @@ Este email ha sido generado automaticamente, no respondas a el.
 
 </div>`;
 
-export const sendMailProductPremiumDeleted = async (user) => {
+export const sendMailProductPremiumDeleted = async (datamail) => {
   const email = await transporter.sendMail({
     from: 'EL EMPORIO DEL JARDIN',
-    to: `${user.email}`,
+    to: `${datamail}`,
     subject: 'Producto eliminado',
     html: emailTemplate
   });
+  console.log(email);
   return email;
 };

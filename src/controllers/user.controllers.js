@@ -107,7 +107,7 @@ export default class UserController {
     }
   };
 
-  // Buscar un usuario por su id
+  // Buscar un usuario por su id de cart
   async findUserByCartId (req, res, next) {
     try {
       const idCart = req.params.cid;
@@ -174,7 +174,7 @@ export default class UserController {
   }
 
   // Elimina usuario inactivo por dos dias
-  async deleteInactiveUser (req, res, next) {
+  async deleteInactiveUsers (req, res, next) {
     try {
       const result = await userManagerMongo.deleteInactiveUsers();
       res.status(200).send({
@@ -222,7 +222,7 @@ export default class UserController {
       last_connection: req.user.last_connection
     };
     req.logger.info('Inicio de Session');
-    res.json({ status: 'success', payload: req.user });
+    res.status(200).json({ status: 'success', payload: req.user });
   };
 
   // Login fallido de usuario

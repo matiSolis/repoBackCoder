@@ -55,12 +55,11 @@
                 <p>Stock: {{this.stock}}</p>
                 <h5 class="divisorProduct"></h5>
                 <div class="divBottomProducts">
-                    <button class="inputButton2">Agregar al carrito</button>
+                    <button class="inputButton2 cartButton" data-product-id="{{this._id}}" data-user-id="{{../user._id}}" data-cart-id="{{../user.cart}}">Agregar al carrito</button>
                 </div>
             </div>
         {{/each}}
     </div>
 </div>
 
-
-
+<script src="/public/js/addcart.js"></script>

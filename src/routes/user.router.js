@@ -12,5 +12,5 @@ router.post('/', userController.createUser);
 router.get('/admin/', adminSession, userController.getAllUsersAdmin);
 router.put('/admin/editrole/:uid', adminSession, userController.editUserRole);
 router.delete('/admin/:uid', adminSession, userController.deleteUserById);
-router.delete('/admin/deleteInactiveUser', adminSession, userController.deleteInactiveUser);
+router.delete('/admin/deleteInactiveUsers', userController.deleteInactiveUsers);
 export default router;

@@ -9,6 +9,5 @@ router.get('/admin', (req, res) => {
     res.status(500).send({ error: 'Error interno del servidor' });
   }
 });
-// router.put('/admin/users/:uid', adminUserController.updateRoleUser)
 
 export default router;
